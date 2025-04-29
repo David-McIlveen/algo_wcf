@@ -22,7 +22,8 @@ enum OUTPUT_MODE {
 // Writes a series of tiles to an image
 class TileWriter{
     public:
-        TileWriter(fs::path output_dir, std::string output_name, std::vector<Tile*> all_tiles,QuantumGrid* grid, OUTPUT_MODE out_mode);
+        TileWriter(fs::path output_dir, std::vector<Tile*> all_tiles,QuantumGrid* grid);
+        void run_algo(std::string output_name, OUTPUT_MODE mode);
     private:
         int _img_x_size;
         int _img_y_size;

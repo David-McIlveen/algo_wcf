@@ -2,11 +2,10 @@
 
 using namespace std;
 
-TileWriter::TileWriter(fs::path output_dir, string out_name, std::vector<Tile*> all_tiles, QuantumGrid* grid, OUTPUT_MODE out_mode){
+TileWriter::TileWriter(fs::path output_dir, std::vector<Tile*> all_tiles, QuantumGrid* grid){
     if(!fs::is_directory(output_dir)) throw "Must input a directory!";
     if(all_tiles.empty()) throw "Must have at least one tile to build grid with!";
     _out_dir = output_dir;
-    _output_name = out_name;
     _grid = grid;
     _tile_x_size = all_tiles.at(0)->get_tile_data()->_x_size;
     _tile_y_size = all_tiles.at(0)->get_tile_data()->_y_size;
@@ -16,23 +15,27 @@ TileWriter::TileWriter(fs::path output_dir, string out_name, std::vector<Tile*> 
     _img_y_size = all_tiles.at(0)->get_tile_data()->_y_size * grid->get_y();
     // Assuming it's an RGBA PNG
     _to_print = new Image(_img_x_size, _img_y_size, 4);
-    switch (out_mode){
-    case ITERATION:
-        set_black_image();
-        perform_iteration();
-        break;
-    case GRID_ITERATION:
-        set_black_image();
-        set_outline_grid();
-        perform_iteration();
-        break;
-    case WHOLE_TIME:
-        perform_benchmarking(NUMBER_OF_TESTS);
-        break;
-    case WHOLE:
-        perform_collapse();
-        break;
-    }
+}
+
+void TileWriter::run_algo(string output_name, OUTPUT_MODE mode){
+    _output_name = output_name;
+    switch (mode){
+        case ITERATION:
+            set_black_image();
+            perform_iteration();
+            break;
+        case GRID_ITERATION:
+            set_black_image();
+            set_outline_grid();
+            perform_iteration();
+            break;
+        case WHOLE_TIME:
+            perform_benchmarking(NUMBER_OF_TESTS);
+            break;
+        case WHOLE:
+            perform_collapse();
+            break;
+        }
 }
 
 void TileWriter::set_black_image(){

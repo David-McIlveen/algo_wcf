@@ -3,13 +3,13 @@
 
 OUTPUT_MODE choose_options(string option){
     if(option == "-whole" || option == "-w"){
-
+        return WHOLE;
     } else if (option == "-time" || option == "-t"){
-
+        return WHOLE_TIME;
     } else if (option == "-iteration" || option == "-i"){
-
+        return ITERATION;
     } else if (option == "-grid-iteration" || option == "-g"){
-        
+        return GRID_ITERATION;
     } else {
         throw "No such argument: " + option + " exists.";
     }
