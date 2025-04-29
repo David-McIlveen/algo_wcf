@@ -1,0 +1,1 @@
+g++ main.cpp quantum/quantum_grid.cpp quantum/quantum_tile.cpp benchmarking/testing.cpp benchmarking/stopwatch.cpp tiles/tile_parser.cpp tiles/tile.cpp tiles/tile_writer.cpp stb_image/src/stb_image_cpp.cpp -o algo
