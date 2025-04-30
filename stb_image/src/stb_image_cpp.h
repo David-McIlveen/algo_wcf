@@ -36,6 +36,8 @@ class Image{
         double at(int x, int y, int c);
         // Sets the double value of a given pixel at x and y
         void set(double value, int x, int y, int c);
+        // Gets a relatively unique value for the summation of all the colors in the image
+        double get_color_sum();
         // Determines if the image is saved as a JPEG or PNG
         void set_save_mode(image_type save);
         // double at_grey(int x, int y);

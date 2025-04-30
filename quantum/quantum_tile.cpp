@@ -108,6 +108,13 @@ void QuantumTile::make_choice(){
     for (size_t i = 0; i < _no_of_tiles; i++){
         if(_choices[i]) tiles_to_choose_from.push_back(i);
     }
+
+    // ERROR! NOT ENOUGH TILE DATA!
+    if(tiles_to_choose_from.size() == 0){
+        _chosen_tile = 0;
+        return;
+    } 
+
     // Make a choice
     int choice_index = random_int(tiles_to_choose_from.size());
     _chosen_tile = tiles_to_choose_from.at(choice_index);

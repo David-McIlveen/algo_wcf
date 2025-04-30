@@ -10,6 +10,7 @@ class Tile{
         int get_id();
         raw_tile_data* get_tile_data();
         bool** get_rule_table();
+        ~Tile();
     private:
         // Raw data for a given tile
         raw_tile_data* _data;

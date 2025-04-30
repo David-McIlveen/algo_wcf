@@ -64,6 +64,23 @@ void Image::set(double d, int x, int y, int c){
     _colors_d[_channels * (y * _width + x) + c] = d;
 }
 
+double Image::get_color_sum(){
+    double total = 0;
+    for (int i = 0; i < _width * _height * _channels; i++){
+        if(i % 5 == 0){
+            total += _colors_d[i] * .5;
+        } else if (i % 7 == 0){
+            total += _colors_d[i] * .4;
+        } else if (i % 13 == 0){
+            total += _colors_d[i] * .3;
+        } else if (i % 19 == 0){
+            total += _colors_d[i] * .2;
+        }
+        total += _colors_d[i] * 1.0 / _channels + i * .001;
+    }
+    return total;
+}
+
 double* Image::u_eight_to_double(unsigned char* data, int len){
     double* ret_val = new double[len];
     for (int i = 0; i < len; i++){
