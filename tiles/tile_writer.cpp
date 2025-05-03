@@ -65,9 +65,11 @@ void TileWriter::set_outline_grid(){
 }
 
 void TileWriter::update_tiles(int* tiles){
+    cout << "Updateing Tiles" << endl;
     for (int y = 0; y < _tile_y_count; y++){
         for (int x = 0; x < _tile_x_count; x++){
             if(tiles[x + y * _tile_x_count] != DEFAULT_CHOSEN_TILE){
+                cout << "Printing Tile" << endl;
                 Tile* tile = _tile_lookup.at(tiles[x + y * _tile_x_size]);
                 paint_tile(tile, x * _tile_x_size, y * _tile_y_size);
             }
@@ -110,14 +112,21 @@ void TileWriter::paint_tile_square(double brightness, int x_offset, int y_offset
 }
 
 void TileWriter::perform_iteration(){
-    // TODO
+    _grid->collapse([this] (void) {
+        update_entropy(_grid->get_entropy_grid());
+        update_tiles(_grid->get_collapsed_grid());
+        fs::path output = _out_dir / (_output_name  + "-" + std::to_string(_iteration_id) + ".png");
+        _iteration_id += 1;
+        _to_print->set_file(output);
+        _to_print->save_image();
+    });
 }
 
 void TileWriter::perform_benchmarking(int n){
     TimeTest test = TimeTest("WCF_test.csv");
     test.start_test("WCF");
     for (int i = 0; i < n; i++){
-        string file_name = _output_name + "-" + to_string(i);
+        string file_name = _output_name + "-" + std::to_string(i) + ".png";
         test.start();
         _grid->collapse();
         test.stop();
@@ -132,6 +141,6 @@ void TileWriter::perform_benchmarking(int n){
 void TileWriter::perform_collapse(){
     _grid->collapse();
     update_tiles(_grid->get_collapsed_grid());
-    _to_print->set_file(_out_dir / _output_name);
+    _to_print->set_file(_out_dir / (_output_name + ".png"));
     _to_print->save_image();
 }

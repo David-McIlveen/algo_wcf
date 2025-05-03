@@ -10,7 +10,7 @@ class TileRuleSet{
         bool get(int for_tile, int dir, int at);
         ~TileRuleSet();
     private:
-        bool* lookup;
+        bool* _lookup;
         int _tile_c;
 };
 

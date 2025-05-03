@@ -1,8 +1,7 @@
 #include "tile.hpp"
 
-Tile::Tile(raw_tile_data* data, bool** tile_rule_set){
+Tile::Tile(raw_tile_data* data){
     _data = data;
-    _tile_rule_set = tile_rule_set;
 }
 
 Tile::~Tile(){
@@ -16,8 +15,4 @@ int Tile::get_id(){
 
 raw_tile_data* Tile::get_tile_data(){
     return _data;
-}
-
-bool** Tile::get_rule_table(){
-    return _tile_rule_set;
 }

@@ -3,6 +3,8 @@
 
 #include "../tiles/tile.hpp"
 #include "quantum_tile.hpp"
+#include "../tiles/rule_set.hpp"
+#include <functional>
 
 const int UP = 0;
 const int DOWN = 1;
@@ -12,11 +14,11 @@ const int RIGHT = 3;
 class QuantumGrid{
     public:
         // Desired x and y size, along with the tiles to fill that.
-        QuantumGrid(int x, int y, int tile_count, bool*** ruleset);
+        QuantumGrid(int x, int y, int tile_count, TileRuleSet* ruleset);
         // Collapses the Grid all at once goes faster
         void collapse();
         // Collapses the Grid with a callback every time a tile is collapsed successfully
-        void collapse(void (*callback)());
+        void collapse(std::function<void(void)> callback);
         // Deletes all Quantum tiles and resets the board.        
         void reset();
         // Gets the current entropy, updates when called
@@ -30,7 +32,7 @@ class QuantumGrid{
         int _tile_count;
         int _x_size;
         int _y_size;
-        bool*** _ruleset;
+        TileRuleSet* _ruleset;
         // An array of X * Y tiles;
         QuantumTile** _tiles;
         // A grid with the IDs of all collapsed tiles

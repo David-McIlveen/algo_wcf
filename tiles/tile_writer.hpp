@@ -31,6 +31,7 @@ class TileWriter{
         int _tile_y_size;
         int _tile_x_count;
         int _tile_y_count;
+        int _iteration_id = 0;
         QuantumGrid* _grid;
         std::vector<Tile*> _tile_lookup;
         fs::path _out_dir;
