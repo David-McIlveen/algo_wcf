@@ -5,13 +5,17 @@ QuantumGrid::QuantumGrid(int x, int y, int tile_count, TileRuleSet* ruleset){
     _x_size = x;
     _y_size = y;
     _tiles = new QuantumTile* [x * y];
+    _collapsed_grid = new int[x * y];
+    _entropy_grid = new int[x * y];
     _ruleset = ruleset;
     populate_tiles();
 }
 
 QuantumGrid::~QuantumGrid(){
     destroy_all_tiles();
-    delete _tiles;
+    delete[] _tiles;
+    delete[] _collapsed_grid;
+    delete[] _entropy_grid;
 }
 
 void QuantumGrid::collapse(){

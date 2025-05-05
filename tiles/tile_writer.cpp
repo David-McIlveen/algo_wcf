@@ -7,12 +7,13 @@ TileWriter::TileWriter(fs::path output_dir, std::vector<Tile*> all_tiles, Quantu
     if(all_tiles.empty()) throw "Must have at least one tile to build grid with!";
     _out_dir = output_dir;
     _grid = grid;
+    _tile_lookup = all_tiles;
     _tile_x_size = all_tiles.at(0)->get_tile_data()->_x_size;
     _tile_y_size = all_tiles.at(0)->get_tile_data()->_y_size;
     _tile_x_count = grid->get_x();
     _tile_y_count = grid->get_y();
-    _img_x_size = all_tiles.at(0)->get_tile_data()->_x_size * grid->get_x();
-    _img_y_size = all_tiles.at(0)->get_tile_data()->_y_size * grid->get_y();
+    _img_x_size = _tile_x_count * _tile_x_size;
+    _img_y_size = _tile_y_count * _tile_y_size;
     // Assuming it's an RGBA PNG
     _to_print = new Image(_img_x_size, _img_y_size, 4);
 }
@@ -45,7 +46,7 @@ void TileWriter::set_black_image(){
                 if(c == 3){
                     _to_print->set(1, x, y, c);
                 } else {
-                    _to_print->set(0, x, y, c);
+                    _to_print->set(1, x, y, c);
                 }
             } 
         }
@@ -53,24 +54,30 @@ void TileWriter::set_black_image(){
 }
 
 void TileWriter::set_outline_grid(){
+    // for (int y = 0; y < _img_y_size; y++){
+    //     if(y % _tile_y_size == 0 || y % _tile_y_size == _tile_y_size - 1) continue;
+    //     for (int x = 0; x < _img_x_size; x++){
+    //         if(x % _tile_x_size == 0 || x % _tile_x_size == _tile_x_size - 1) continue;
+    //         for (int c = 0; c < 3; c++){
+    //             _to_print->set(.5, x, y, c);
+    //         }
+    //     }
+    // }
     for (int y = 0; y < _img_y_size; y++){
-        if(y % _tile_y_size != 0 && y % _tile_y_size != _tile_y_size - 1) continue;
+        if(y % 2 == 0) continue;
         for (int x = 0; x < _img_x_size; x++){
-            if(x % _tile_x_size != 0 && x % _tile_x_size != _tile_x_size - 1) continue;
             for (int c = 0; c < 3; c++){
-                _to_print->set(.2, x, y, c);
+                _to_print->set(.5, x, y, c);
             }
         }
     }
 }
 
 void TileWriter::update_tiles(int* tiles){
-    cout << "Updateing Tiles" << endl;
     for (int y = 0; y < _tile_y_count; y++){
         for (int x = 0; x < _tile_x_count; x++){
             if(tiles[x + y * _tile_x_count] != DEFAULT_CHOSEN_TILE){
-                cout << "Printing Tile" << endl;
-                Tile* tile = _tile_lookup.at(tiles[x + y * _tile_x_size]);
+                Tile* tile = _tile_lookup.at(tiles[x + y * _tile_x_count]);
                 paint_tile(tile, x * _tile_x_size, y * _tile_y_size);
             }
         }
@@ -83,7 +90,10 @@ void TileWriter::paint_tile(Tile* tile, int x_offset, int y_offset){
     for (int y = 0; y < _tile_y_size; y++){
         for (int x = 0; x < _tile_x_size; x++){
             for (int c = 0; c < 4; c++){
-                double v = tile_colors->at(x, y, c);
+                double v = 1;
+                if(tile_colors->get_channels() > c){
+                    v = tile_colors->at(x, y, c);
+                };
                 _to_print->set(v, x + x_offset, y + y_offset, c);
             }
         }
@@ -93,7 +103,7 @@ void TileWriter::paint_tile(Tile* tile, int x_offset, int y_offset){
 void TileWriter::update_entropy(int* tiles){
     for (int y = 0; y < _tile_y_count; y++){
         for (int x = 0; x < _tile_x_count; x++){
-            if(tiles[x + y * _tile_x_count] != _tile_lookup.size() || tiles[x + y * _tile_x_count] != 0){
+            if(tiles[x + y * _tile_x_count] < _tile_lookup.size() || tiles[x + y * _tile_x_count] != 0){
                 paint_tile_square((_tile_lookup.size() - tiles[x + y * _tile_x_count]) * 1.0 / _tile_lookup.size(), x * _tile_x_size, y * _tile_y_size);
             }
         } 

@@ -39,7 +39,7 @@ void QuantumTile::alter_ruleset(int for_tile, int dir){
 
     for (int i = 0; i < _no_of_tiles; i++){
         // If the choice is available and it cannot be anymore:
-        if(_choices[i] && _rule_book->get(for_tile, dir, i)){
+        if(_choices[i] && !_rule_book->get(for_tile, dir, i)){
             _choices[i] = false;
             _entropy -= 1;
         }
@@ -56,17 +56,17 @@ void QuantumTile::collapse(){
     order_adj_tiles();
     for (int i = 0; i < to_collapse.size(); i++){
         if(to_collapse.at(i)->is_collapsed()) continue;
-        std::cout << "Calling for collapse..." << std::endl;
         to_collapse.at(i)->collapse();
     }
 }
 
 void QuantumTile::collapse(std::function<void(void)> callback){
-    if(_chosen_tile != DEFAULT_CHOSEN_TILE) return;
+    if(is_collapsed()) return;
     collapse_affect();
     order_adj_tiles();
     callback(); //Sneak the update callback in there ;3
     for (int i = 0; i < to_collapse.size(); i++){
+        if(to_collapse.at(i)->is_collapsed()) continue;
         to_collapse.at(i)->collapse(callback);
     }
 }
@@ -128,7 +128,7 @@ void QuantumTile::make_choice(){
     // ERROR! NOT ENOUGH TILE DATA!
     if(tiles_to_choose_from.empty()){
         _chosen_tile = 0;
-        std::cerr << "Tile rule set was not well defined enough" << std::endl;
+        std::cout << "Tile rule set was not well defined enough" << std::endl;
         return;
     } 
 

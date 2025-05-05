@@ -8,6 +8,7 @@ class TileRuleSet{
         TileRuleSet(int tile_c);
         void set(bool value, int for_tile, int dir, int at);
         bool get(int for_tile, int dir, int at);
+        void print();
         ~TileRuleSet();
     private:
         bool* _lookup;

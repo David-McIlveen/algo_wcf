@@ -113,6 +113,14 @@ raw_tile_data* TileParser::get_tile_data(int x_off, int y_off){
 }
 
 void TileParser::set_ruleset(){
+    // cout << "Printing IDs" << endl;
+    // for (int y = 0; y < _tile_y_count; y++){
+    //     for (int x = 0; x < _tile_x_count; x++){
+    //         cout << id_at(x, y) << ",";
+    //     }
+    //     cout << endl;
+    // }
+    
     _master_ruleset = new TileRuleSet(_raw_tiles.size());
     for (int y = 0; y < _tile_y_count; y++){
         for (int x = 0; x < _tile_x_count; x++){
@@ -135,6 +143,7 @@ void TileParser::set_ruleset(){
             }
         }
     }
+    //_master_ruleset->print();
 }
 
 void TileParser::generate_tiles(){

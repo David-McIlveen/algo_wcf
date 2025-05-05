@@ -55,7 +55,7 @@ int main(int argc, char* argv[]){
         try{
             int x = get_integer("Please enter a X value: ");
             int y = get_integer("Please enter a Y value: ");
-            TileParser parser = TileParser(fs::path("config/ruleset.jpg"), fs::path("config/config.txt"));
+            TileParser parser = TileParser(fs::path("config/ruleset.png"), fs::path("config/config.txt"));
             cout << "Parsed" << endl;
             TileRuleSet* rules = parser.get_rule_set();
             std::vector<Tile*> tiles = parser.get_tiles();
