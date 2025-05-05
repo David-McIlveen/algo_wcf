@@ -6,7 +6,7 @@ using namespace std;
 TileRuleSet::TileRuleSet(int tile_c){
     _lookup = new bool[DIR_COUNT * tile_c * tile_c];
     _tile_c = tile_c;
-    for (int i = 0; i < DIR_COUNT * DIR_COUNT * tile_c; i++){
+    for (int i = 0; i < DIR_COUNT * tile_c * tile_c; i++){
         _lookup[i] = false;
     }
 }
